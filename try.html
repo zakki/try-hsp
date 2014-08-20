@@ -173,7 +173,7 @@
 
 	goto *main
   </div>
-  <span><input type="button" id="compile" value="Compile"></span>
+  <span><input type="button" id="compile" value="Compile & Run"></span>
   <textarea id="compile-error" rows="4"></textarea>
   <textarea id="output" rows="2"></textarea>
   <a id="result-ax" download="out.ax">download result</a>
@@ -182,9 +182,9 @@
   <iframe id="run" src="dish-run.html"></iframe>
   <p>Sample
   <ul id="sample">
-    <li hsp="block3.hsp">block3</li>
-    <li hsp="gradf.hsp">gradf</li>
-    <li hsp="xsample_gcube.hsp">xsample_gcube</li>
+    <li hsp="samples/block3.hsp">block3</li>
+    <li hsp="samples/gradf.hsp">gradf</li>
+    <li hsp="samples/xsample_gcube.hsp">xsample_gcube</li>
   </ul>
 </div>
 </div>
@@ -251,7 +251,7 @@
   Module.setStatus('Downloading...');
 </script>
 <script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-<script async type="text/javascript" src="resources/hspcmp.js"></script>
+<script async type="text/javascript" src="hspcmp.js"></script>
 <script async type="text/javascript" src="edit.js"></script>
 </body>
 </html>
