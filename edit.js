@@ -115,7 +115,7 @@
   $("#sample li").click(function (e) {
 	var src = $(e.target).attr("hsp");
 	if (src) {
-	  $.get(src, function(data) {
+	  $.get("samples/" + src, function(data) {
 		//$("#compile-input").text(data);
 		editor.setValue(data);
 	  });
