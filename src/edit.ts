@@ -35,7 +35,7 @@ module TryHSP {
 
     function compile(run: boolean): void {
 	    console.log("compile");
-	    var src = editor.getValue();//$("#compile-input").val();
+	    var src = editor.getValue();
 
 	    console.log(src);
 	    str2bytes(src, data => {
@@ -89,6 +89,20 @@ module TryHSP {
 	    });
     }
 
+    function share() {
+	    var src = editor.getValue();
+        window.location.hash = "src=" + encodeURIComponent(src);
+    }
+
+    function loadFromHash() {
+        var hash = window.location.hash;
+        var pos = hash.indexOf("#src=");
+        if (pos >= 0) {
+            var enc = hash.substring(pos + "#src=".length);
+            editor.setValue(decodeURIComponent(enc));
+        }
+    }
+
     var recompileID;
 
     $(document).ready(function() {
@@ -109,6 +123,9 @@ module TryHSP {
 	    });
 
 	    $("#compile").click(() => compile(true));
+	    $("#share").click(() => share());
+        $(window).bind('hashchange', () => loadFromHash());
+        loadFromHash();
     });
 
     $("#sample li").click(e => {
