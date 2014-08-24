@@ -59,7 +59,7 @@ interface Module {
     addOnPostRun(cb: () => any): void;
 
 	// Tools
-    intArrayFromString(stringy: string, dontAddNull: boolean, length?: number): number[];
+    intArrayFromString(stringy: string, dontAddNull?: boolean, length?: number): number[];
     intArrayToString(array: number[]): string;
     writeStringToMemory(str: string, buffer: number, dontAddNull: boolean): void;
     writeArrayToMemory(array: number[], buffer: number): void;
