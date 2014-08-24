@@ -36,55 +36,51 @@ module TryHSP {
 	    var src = editor.getValue();
 
 	    console.log(src);
-	    str2bytes(src, data => {
-	        console.log(data);
-	        var stream = FS.open("source.hsp", 'w');
-	        FS.write(stream, data, 0, data.length, 0);
-	        FS.close(stream);
+        var data = new Uint8Array(Module.intArrayFromString(src));
+	    console.log(data);
+	    var stream = FS.open("source.hsp", 'w');
+	    FS.write(stream, data, 0, data.length, 0);
+	    FS.close(stream);
 
-	        str2bytes("source.hsp", nameArray => {
-		        console.log(nameArray);
-		        console.log(String.fromCharCode.apply(null, nameArray));
-		        var bufPtr = Module._malloc(nameArray.byteLength);
-		        Module.HEAPU8.set(nameArray, bufPtr);
-		        //console.log(String.fromCharCode.apply(null, nameArray));
-		        console.log("hsc_ini");
-		        Module.ccall('hsc_ini', 'number', ['number', 'number', 'number', 'number'],
-					         [0, bufPtr, 0, 0]);
-		        console.log("hsc_comp");
-		        var st = Module.ccall('hsc_comp', 'number', ['number', 'number', 'number', 'number'],
-							          [0, 0, 0, 0]);
-		        console.log("compile result", st);
-		        var mesPtr = Module._malloc(0x1000);
-		        Module.ccall('hsc_getmes', 'number', ['number', 'number', 'number', 'number'],
-					         [mesPtr, 0, 0, 0]);
-		        //var mesArray = Module.HEAP8.subarray(mesPtr, mesPtr+0x1000);
-		        //var str = String.fromCharCode.apply(null, mesArray);
-		        var str = Module.Pointer_stringify(mesPtr);
-		        var lines = str.split("\n");
-		        editor.session.clearAnnotations();
-		        for (var i = 0; i < lines.length; i++) {
-		            var err = lines[i].match(/\.hsp\(([0-9]+)\) : error /);
-		            if (err && err[1]) {
-			            var lineno = +err[1];
-			            //editor.gotoLine(lineno);
-			            editor.session.setAnnotations([{
-			                row:lineno - 1 ,column: 0,
-			                text: lines[i], type:"error"}]); 
-		            }
-		        }
-		        console.log(str);
-		        var src = $("#compile-error").val(str);
-		        if (st == 0) {
-		            setDownloadAx();
-		            if (run) {
-			            runAx();
-		            }
-		        }
-		        Module._free(bufPtr);
-		        Module._free(mesPtr);
-	        });
-	    });
+        var name = Module.intArrayFromString("source.hsp");
+		var bufPtr = Module._malloc(name.length);
+        Module.writeArrayToMemory(name, bufPtr);
+
+		console.log("hsc_ini");
+		Module.ccall('hsc_ini', 'number', ['number', 'number', 'number', 'number'],
+					 [0, bufPtr, 0, 0]);
+		console.log("hsc_comp");
+		var st = Module.ccall('hsc_comp', 'number', ['number', 'number', 'number', 'number'],
+							  [0, 0, 0, 0]);
+		console.log("compile result", st);
+		var mesPtr = Module._malloc(0x1000);
+		Module.ccall('hsc_getmes', 'number', ['number', 'number', 'number', 'number'],
+					 [mesPtr, 0, 0, 0]);
+		//var mesArray = Module.HEAP8.subarray(mesPtr, mesPtr+0x1000);
+		//var str = String.fromCharCode.apply(null, mesArray);
+		var str = Module.Pointer_stringify(mesPtr);
+		var lines = str.split("\n");
+		editor.session.clearAnnotations();
+		for (var i = 0; i < lines.length; i++) {
+		    var err = lines[i].match(/\.hsp\(([0-9]+)\) : error /);
+		    if (err && err[1]) {
+			    var lineno = +err[1];
+			    //editor.gotoLine(lineno);
+			    editor.session.setAnnotations([{
+			        row:lineno - 1 ,column: 0,
+			        text: lines[i], type:"error"}]); 
+		    }
+		}
+		console.log(str);
+		$("#compile-error").val(str);
+		if (st == 0) {
+		    setDownloadAx();
+		    if (run) {
+			    runAx();
+		    }
+		}
+		Module._free(bufPtr);
+		Module._free(mesPtr);
     }
 
     function share() {
