@@ -1,13 +1,13 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/ace/ace.d.ts" />
+/// <reference path="emscripten.d.ts" />
 
-declare var Module: any;
 declare var FS: any;
-declare var Pointer_stringify: any;
 
 module TryHSP {
     var editor;
 
+//USE function intArrayFromString(stringy, dontAddNull, length /* optional */)
     function str2bytes(str: string, callback: (string) => void): void {
 	    var fr = new FileReader();
 	    fr.onloadend = () => callback(new Uint8Array(fr.result));
@@ -62,13 +62,13 @@ module TryHSP {
 					         [mesPtr, 0, 0, 0]);
 		        //var mesArray = Module.HEAP8.subarray(mesPtr, mesPtr+0x1000);
 		        //var str = String.fromCharCode.apply(null, mesArray);
-		        var str = Pointer_stringify(mesPtr);
+		        var str = Module.Pointer_stringify(mesPtr);
 		        var lines = str.split("\n");
 		        editor.session.clearAnnotations();
 		        for (var i = 0; i < lines.length; i++) {
 		            var err = lines[i].match(/\.hsp\(([0-9]+)\) : error /);
 		            if (err && err[1]) {
-			            var lineno = err[1] | 0;
+			            var lineno = +err[1];
 			            //editor.gotoLine(lineno);
 			            editor.session.setAnnotations([{
 			                row:lineno - 1 ,column: 0,
