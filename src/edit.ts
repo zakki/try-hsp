@@ -2,8 +2,6 @@
 /// <reference path="../typings/ace/ace.d.ts" />
 /// <reference path="emscripten.d.ts" />
 
-declare var FS: any;
-
 module TryHSP {
     var editor;
 
