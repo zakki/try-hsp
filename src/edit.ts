@@ -108,7 +108,11 @@ module TryHSP {
     $(document).ready(function() {
 	    console.log("ready");
 
+        ace.require("ace/ext/language_tools");
 	    editor = ace.edit("compile-input");
+        editor.setOptions({
+            enableBasicAutocompletion: true
+        });
 	    editor.setTheme("ace/theme/chrome");
 	    editor.getSession().setMode("ace/mode/hsp");
 
