@@ -14,6 +14,10 @@
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
       canvas.emscripten { border: 0px none; }
 
+      div.emscripten.status {
+	    position: absolute;
+	  }
+
       #status {
         display: inline-block;
         vertical-align: top;
@@ -44,9 +48,9 @@
     </style>
   </head>
   <body>
-    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten status" id="status">Downloading...</div>
 
-    <div class="emscripten">
+    <div class="emscripten status">
       <progress value="0" max="100" id="progress" hidden=1></progress>
     </div>
 
@@ -114,12 +118,12 @@ var Module = {
 Module.setStatus('Downloading...');
 
 function runAX(data) {
-	ENV.HSP_WX = "480";//スクリプトの動作解像度
-	ENV.HSP_WY = "800";
-	ENV.HSP_SX = "480";//表示解像度
-	ENV.HSP_SY = "800";
+	ENV.HSP_WX = "320";//スクリプトの動作解像度
+	ENV.HSP_WY = "480";
+	ENV.HSP_SX = "320";//表示解像度
+	ENV.HSP_SY = "480";
 	ENV.HSP_FPS = "0";
-	ENV.HSP_LIMIT_STEP = "1000000";
+	ENV.HSP_LIMIT_STEP = "100000";
 	ENV.HSP_AUTOSCALE = "0";//スケーリングモード
 
 

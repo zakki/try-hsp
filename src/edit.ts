@@ -121,6 +121,10 @@ module TryHSP {
 	    });
 
 	    $("#compile").click(() => compile(true));
+	    $("#stop").click(() => {
+	        var runFrame = <HTMLFrameElement>document.getElementById('run');
+		    runFrame.contentWindow["Module"].exit(1);            
+        });
 	    $("#share").click(() => share());
         $(window).bind('hashchange', () => loadFromHash());
         loadFromHash();
