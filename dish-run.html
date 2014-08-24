@@ -114,6 +114,15 @@ var Module = {
 Module.setStatus('Downloading...');
 
 function runAX(data) {
+	ENV.HSP_WX = "480";//スクリプトの動作解像度
+	ENV.HSP_WY = "800";
+	ENV.HSP_SX = "480";//表示解像度
+	ENV.HSP_SY = "800";
+	ENV.HSP_FPS = "0";
+	ENV.HSP_LIMIT_STEP = "1000000";
+	ENV.HSP_AUTOSCALE = "0";//スケーリングモード
+
+
 	console.log("save ax", data, data.length);
 	var stream = FS.open("start.ax", 'w');
 	FS.write(stream, data, 0, data.length, 0);

@@ -1,79 +1,86 @@
-interface Runtime {
+// Type definitions for Emscripten 
+// Project: http://kripken.github.io/emscripten-site/index.html
+// Definitions by: Kensuke Matsuzaki <https://github.com/zakki>
+// Definitions: https://github.com/borisyankov/DefinitelyTyped
+
+declare module Emscripten {
+    interface FileSystemType {
+    }
 }
 
-interface Module {
-    print(str: string): void;
-    printErr(str: string): void;
-    arguments: string[];
-    preInit: { ():  void }[];
-    preRun: { ():  void }[];
-    postRun: { ():  void }[];
-    noExitRuntime: boolean;
+declare module Module {
+    function print(str: string): void;
+    function printErr(str: string): void;
+    var arguments: string[];
+    var preInit: { ():  void }[];
+    var preRun: { ():  void }[];
+    var postRun: { ():  void }[];
+    var noExitRuntime: boolean;
 
-    Runtime: Runtime;
+    var Runtime: any;
 
-    ccall(ident: string, returnType: string, argTypes: string[], args: any[]): any;
-    cwrap(ident: string, returnType: string, argTypes: string[]): any;
+    function ccall(ident: string, returnType: string, argTypes: string[], args: any[]): any;
+    function cwrap(ident: string, returnType: string, argTypes: string[]): any;
 
-    setValue(ptr: number, value: any, type: string, noSafe: boolean): void;
-    getValue(ptr: number, type: string, noSafe: boolean): any;
+    function setValue(ptr: number, value: any, type: string, noSafe: boolean): void;
+    function getValue(ptr: number, type: string, noSafe: boolean): any;
 
-    ALLOC_NORMAL: number;
-    ALLOC_STACK: number;
-    ALLOC_STATIC: number;
-    ALLOC_DYNAMIC: number;
-    ALLOC_NONE: number;
+    var ALLOC_NORMAL: number;
+    var ALLOC_STACK: number;
+    var ALLOC_STATIC: number;
+    var ALLOC_DYNAMIC: number;
+    var ALLOC_NONE: number;
 
-    allocate(slab: any, types: string, allocator: number, ptr: number): number;
-    allocate(slab: any, types: string[], allocator: number, ptr: number): number;
+    function allocate(slab: any, types: string, allocator: number, ptr: number): number;
+    function allocate(slab: any, types: string[], allocator: number, ptr: number): number;
 
-    Pointer_stringify(ptr: number, length?: number): string;
-    UTF16ToString(ptr: number): string;
-    stringToUTF16(str: string, outPtr: number): void;
-    UTF32ToString(ptr: number): string;
-    stringToUTF32(str: string, outPtr: number): void;
+    function Pointer_stringify(ptr: number, length?: number): string;
+    function UTF16ToString(ptr: number): string;
+    function stringToUTF16(str: string, outPtr: number): void;
+    function UTF32ToString(ptr: number): string;
+    function stringToUTF32(str: string, outPtr: number): void;
 
     // USE_TYPED_ARRAYS == 1
-    HEAP: Int32Array;
-    IHEAP: Int32Array;
-    FHEAP: Float64Array;
+    var HEAP: Int32Array;
+    var IHEAP: Int32Array;
+    var FHEAP: Float64Array;
 
     // USE_TYPED_ARRAYS == 2
-    HEAP8: Int8Array;
-    HEAP16: Int16Array;
-    HEAP32: Int32Array;
-    HEAPU8:  Uint8Array;
-    HEAPU16: Uint16Array;
-    HEAPU32: Uint32Array;
-    HEAPF32: Float32Array;
-    HEAPF64: Float64Array;
+    var HEAP8: Int8Array;
+    var HEAP16: Int16Array;
+    var HEAP32: Int32Array;
+    var HEAPU8:  Uint8Array;
+    var HEAPU16: Uint16Array;
+    var HEAPU32: Uint32Array;
+    var HEAPF32: Float32Array;
+    var HEAPF64: Float64Array;
 
-    TOTAL_STACK: number;
-    TOTAL_MEMORY: number;
-    FAST_MEMORY: number;
+    var TOTAL_STACK: number;
+    var TOTAL_MEMORY: number;
+    var FAST_MEMORY: number;
 
-    addOnPreRun(cb: () => any): void;
-    addOnInit(cb: () => any): void;
-    addOnPreMain(cb: () => any): void;
-    addOnExit(cb: () => any): void;
-    addOnPostRun(cb: () => any): void;
+    function addOnPreRun(cb: () => any): void;
+    function addOnInit(cb: () => any): void;
+    function addOnPreMain(cb: () => any): void;
+    function addOnExit(cb: () => any): void;
+    function addOnPostRun(cb: () => any): void;
 
 	// Tools
-    intArrayFromString(stringy: string, dontAddNull?: boolean, length?: number): number[];
-    intArrayToString(array: number[]): string;
-    writeStringToMemory(str: string, buffer: number, dontAddNull: boolean): void;
-    writeArrayToMemory(array: number[], buffer: number): void;
-    writeAsciiToMemory(str: string, buffer: number, dontAddNull: boolean);
+    function intArrayFromString(stringy: string, dontAddNull?: boolean, length?: number): number[];
+    function intArrayToString(array: number[]): string;
+    function writeStringToMemory(str: string, buffer: number, dontAddNull: boolean): void;
+    function writeArrayToMemory(array: number[], buffer: number): void;
+    function writeAsciiToMemory(str: string, buffer: number, dontAddNull: boolean): void;
 
-    addRunDependency(id: any): void;
-    removeRunDependency(id: any): void;
+    function addRunDependency(id: any): void;
+    function removeRunDependency(id: any): void;
 
 
-    preloadedImages: any;
-    preloadedAudios: any;
+    var preloadedImages: any;
+    var preloadedAudios: any;
 
-    _malloc(size: number): number;
-    _free(ptr: number): void;
+    function _malloc(size: number): number;
+    function _free(ptr: number): void;
 }
 
 declare module FS {
@@ -111,28 +118,21 @@ declare module FS {
     //
     // devices
     //
-    // each character device consists of a device id + stream operations.
-    // when a character device node is created (e.g. /dev/stdin) it is
-    // assigned a device id that lets us map back to the actual device.
-    // by default, each character device stream (e.g. _stdin) uses chrdev_stream_ops.
-    // however, once opened, the stream's operations are overridden with
-    // the operations of the device its underlying node maps back to.
     function major(dev: number): number;
     function minor(dev: number): number;
-    function makedev(ma: number, mi: number);
+    function makedev(ma: number, mi: number): number;
     function registerDevice(dev: number, ops: any): void;
-    // getDevice(dev: number): Device;
 
     //
     // core
     //
-    function syncfs(populate: boolean, callback: (any) => any): void;
-    function mount(type: any, opts: any, mountpoint: string): any;
+    function syncfs(populate: boolean, callback: (e: any) => any): void;
+    function syncfs( callback: (e: any) => any, populate?: boolean): void;
+    function mount(type: Emscripten.FileSystemType, opts: any, mountpoint: string): any;
     function unmount(mountpoint: string): void;
-    // function lookup(parent: FSNode, name: string): Lookup;
 
-    function mkdir(path: string, mode: number): any;
-    function mkdev(path: string, mode: number, dev: number): any;
+    function mkdir(path: string, mode?: number): any;
+    function mkdev(path: string, mode?: number, dev?: number): any;
     function symlink(oldpath: string, newpath: string): any;
     function rename(old_path: string, new_path: string): void;
     function rmdir(path: string): void;
@@ -158,15 +158,16 @@ declare module FS {
     function allocate(stream: FSStream, offset: number, length: number): void;
     function mmap(stream: FSStream, buffer: ArrayBufferView, offset: number, length: number, position: number, prot: number, flags: number): any;
     function ioctl(stream: FSStream, cmd: any, arg: any): any;
-    function readFile(path: string, opts?: {encoding: string; flags: string}): any; //string | Uint8Array
+    function readFile(path: string, opts?: {encoding: string; flags: string}): any;
     function writeFile(path: string, data: ArrayBufferView, opts?: {encoding: string; flags: string}): void;
+    function writeFile(path: string, data: string, opts?: {encoding: string; flags: string}): void;
 
     //
     // module-level FS code
     //
     function cwd(): string;
     function chdir(path: string): void;
-    function init(input: () => number, output: (number) => any, error: (number) => any): void;
+    function init(input: () => number, output: (c: number) => any, error: (c: number) => any): void;
 
     function createLazyFile(parent: string, name: string, url: string, canRead: boolean, canWrite: boolean): FSNode;
     function createLazyFile(parent: FSNode, name: string, url: string, canRead: boolean, canWrite: boolean): FSNode;
@@ -175,8 +176,10 @@ declare module FS {
     function createPreloadedFile(parent: FSNode, name: string, url: string, canRead: boolean, canWrite: boolean, onload?: ()=> void, onerror?: ()=>void, dontCreateFile?:boolean, canOwn?: boolean): void;
 }
 
+declare var MEMFS: Emscripten.FileSystemType;
+declare var NODEFS: Emscripten.FileSystemType;
+declare var IDBFS: Emscripten.FileSystemType;
+
 interface Math {
     imul(a: number, b: number): number;
 }
-
-declare var Module: Module;
