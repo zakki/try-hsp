@@ -1,6 +1,6 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/ace/ace.d.ts" />
-/// <reference path="emscripten.d.ts" />
+/// <reference path="../typings/emscripten/emscripten.d.ts" />
 
 module TryHSP {
     var editor;

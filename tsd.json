@@ -6,7 +6,10 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "ace/ace.d.ts": {
-      "commit": "c2694483f0fd038f3e769fa59498f230752b8100"
+      "commit": "0031a67d843278b40514452c5e68b8fc0788cee7"
+    },
+    "emscripten/emscripten.d.ts": {
+      "commit": "0031a67d843278b40514452c5e68b8fc0788cee7"
     }
   }
 }
