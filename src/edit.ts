@@ -5,13 +5,6 @@
 module TryHSP {
     var editor;
 
-//USE function intArrayFromString(stringy, dontAddNull, length /* optional */)
-    function str2bytes(str: string, callback: (string) => void): void {
-	    var fr = new FileReader();
-	    fr.onloadend = () => callback(new Uint8Array(fr.result));
-	    fr.readAsArrayBuffer(new Blob([str]));
-    }
-
     function setDownloadAx(): void {
 	    console.log('setup download');
 	    var buf = FS.readFile('source.ax');
@@ -56,8 +49,6 @@ module TryHSP {
 		var mesPtr = Module._malloc(0x1000);
 		Module.ccall('hsc_getmes', 'number', ['number', 'number', 'number', 'number'],
 					 [mesPtr, 0, 0, 0]);
-		//var mesArray = Module.HEAP8.subarray(mesPtr, mesPtr+0x1000);
-		//var str = String.fromCharCode.apply(null, mesArray);
 		var str = Module.Pointer_stringify(mesPtr);
 		var lines = str.split("\n");
 		editor.session.clearAnnotations();
