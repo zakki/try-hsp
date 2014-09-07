@@ -47,7 +47,7 @@
       }
     </style>
   </head>
-  <body>
+  <body tabindex="1">
     <div class="emscripten status" id="status">Downloading...</div>
 
     <div class="emscripten status">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex="1"></canvas>
     </div>
 
     <script type='text/javascript'>
@@ -123,7 +123,7 @@ function runAX(data) {
 	ENV.HSP_SX = "320";//表示解像度
 	ENV.HSP_SY = "480";
 	ENV.HSP_FPS = "0";
-	ENV.HSP_LIMIT_STEP = "100000";
+	ENV.HSP_LIMIT_STEP = "1000";
 	ENV.HSP_AUTOSCALE = "0";//スケーリングモード
 
 
