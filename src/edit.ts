@@ -114,7 +114,8 @@ module TryHSP {
 	    $("#compile").click(() => compile(true));
 	    $("#stop").click(() => {
 	        var runFrame = <HTMLFrameElement>document.getElementById('run');
-		    runFrame.contentWindow["Module"].exit(1);            
+	        var m = runFrame.contentWindow["Module"];
+	        m.abort();
         });
 	    $("#share").click(() => share());
         $(window).bind('hashchange', () => loadFromHash());
