@@ -1,5 +1,7 @@
 #include "hsp3dish.as"
 
+#define SCOREFILE "/save/block.score"
+
 	;
 	;	ブロック崩し(3)
 	;	(ボール・バー・ブロック表示します)
@@ -12,6 +14,15 @@
 	screen 0,x2,y2
 	title "ブロック崩し"
 	;cls 4
+
+	sdim s,64
+	exist SCOREFILE
+	if strsize >= 0 {
+		bload SCOREFILE,s
+		highscore=int(s)
+	} else {
+		highscore=-1
+	}
 *gstart
 	clrflag=0		; クリアフラグ
 
@@ -38,8 +49,9 @@
 	gameflag = 0
 *main
 	redraw 0
+	if score > highscore : highscore = score
 	color 0,0,128:boxf
-	color 0,255,255:pos 8,8:mes "SCORE:"+score
+	color 0,255,255:pos 8,8:mes "SCORE:"+score+" HIGH:"+highscore
 
 	;gradf 0,0,x2,y2,1,0,128	; 画面クリア
 
@@ -65,7 +77,10 @@
 	; ボール : Y方向の移動
 	bly=bly+bpy
 	if bly<=y1 : bly=y1 : bpy=blspd : bk=1 : blspd=16
-	if bly>=(y2-blsize) : gameflag = 1
+	if bly>=(y2-blsize) {
+		gosub *savescore
+		gameflag = 1
+	}
 
 	; ボールとバーがぶつかったかどうか調べます
 	coly=bly+blsize
@@ -131,6 +146,13 @@
 	;objsize 180,32
 	;pos 150,330:button "終わり",*owari
 	;stop
+
+*savescore
+	s=strf("%08d",highscore)
+	bsave SCOREFILE,s,8
+	devcontrol "syncfs"
+	mes "ok"
+	return
 
 *owari
 	end

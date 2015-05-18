@@ -3589,14 +3589,14 @@ _encode_init
 #cmd selefx $44
 #cmd selwork $45
 
-#define selcpos selpos HGOBJ_CAMERA
-#define selcang selang HGOBJ_CAMERA
-#define selcint seldir HGOBJ_CAMERA
+#define global selcpos selpos HGOBJ_CAMERA
+#define global selcang selang HGOBJ_CAMERA
+#define global selcint seldir HGOBJ_CAMERA
 
-#define sellpos selpos HGOBJ_LIGHT
-#define sellang selang HGOBJ_LIGHT
-#define sellcolor selscale HGOBJ_LIGHT
-#define sellambient seldir HGOBJ_LIGHT
+#define global sellpos selpos HGOBJ_LIGHT
+#define global sellang selang HGOBJ_LIGHT
+#define global sellcolor selscale HGOBJ_LIGHT
+#define global sellambient seldir HGOBJ_LIGHT
 
 #cmd objset1 $48
 #cmd objsetf1 $48
@@ -3696,10 +3696,10 @@ _encode_init
 #cmd fvinner $a8
 #cmd fvface $a9
 
-#define fsin(%1,%2) %1=sin(%2)
-#define fcos(%1,%2) %1=cos(%2)
-#define fsqr(%1,%2) %1=sqrt(%2)
-#define froti(%1,%2) %1=%2/6433.98175455188992
+#define global fsin(%1,%2) %1=sin(%2)
+#define global fcos(%1,%2) %1=cos(%2)
+#define global fsqr(%1,%2) %1=sqrt(%2)
+#define global froti(%1,%2) %1=%2/6433.98175455188992
 
 #cmd fv2str $aa
 #cmd f2str $ab
@@ -4116,20 +4116,9 @@ _encode_init
 #define global SYSREQ_DEBUG $10000
 
 #regcmd 9
-#cmd gfilter $3f
-#cmd setreq $40
-#cmd getreq $41
-#cmd mmvol $42
-#cmd mmpan $43
-#cmd mmstat $44
-#cmd mtlist $45
-#cmd mtinfo $46
-#cmd devinfo $47
-#cmd devinfoi $48
-#cmd devprm $49
-#cmd devcontrol $4a
-#cmd setcls $4b
-#cmd celputm $4c
+
+#cmd setcls $5e
+#cmd celputm $5f
 
 #cmd gpreset $60
 #cmd gpdraw $61
@@ -5403,6 +5392,7 @@ _encode_init
 #const global PLATFORM_WINDOWS 0
 #const global PLATFORM_IOS 1
 #const global PLATFORM_ANDROID 2
+#const global PLATFORM_WEBGL 3
 
 #define global SYSREQ_DEBUG $10000
 
@@ -5410,19 +5400,22 @@ _encode_init
 #define global ginfo_accy ginfo(0x101)
 #define global ginfo_accz ginfo(0x102)
 
-#regcmd 9
-#cmd gfilter $3f
-#cmd setreq $40
-#cmd getreq $41
-#cmd mmvol $42
-#cmd mmpan $43
-#cmd mmstat $44
-#cmd mtlist $45
-#cmd mtinfo $46
-#cmd devinfo $47
-#cmd devinfoi $48
-#cmd devprm $49
-#cmd devcontrol $4a
+;
+;	http value
+;
+#enum global HTTPMODE_NONE=0
+#enum global HTTPMODE_READY
+#enum global HTTPMODE_REQUEST
+#enum global HTTPMODE_SEND
+#enum global HTTPMODE_DATAWAIT
+#enum global HTTPMODE_DATAEND
+#define global HTTPMODE_ERROR (-1)
+
+#define global HTTPINFO_MODE 0		; 現在のモード
+#define global HTTPINFO_SIZE 1		; データサイズ
+#define global HTTPINFO_DATA 16		; 取得データ
+#define global HTTPINFO_ERROR 17	; エラー文字列
+
 
 #endif
 
@@ -5432,7 +5425,7 @@ _encode_init
 #ifndef __obaq__
 #define __obaq__
 
-#regcmd 16
+#regcmd 18
 #cmd qreset $00							// qreset
 #cmd qterm $01							// qterm
 #cmd qexec $02							// qexec
@@ -5483,6 +5476,7 @@ _encode_init
 #cmd qgetinertia $2f						// qgetinertia
 #cmd qgetversion $30						// qgetversion
 #cmd qinner $31							// qinner
+
 
 ;
 ;	type define
@@ -5893,6 +5887,15 @@ _encode_init
 
 
 #endif
+;
+; HSP64 define and macros
+;
+#ifndef __hsp64__
+#define __hsp64__
+#runtime "hsp3_64"
+#endif
+
+
 
 ;	hspcmp.dll header
 
@@ -6079,11 +6082,6 @@ _encode_init
 #cmpopt varname 1
 
 #uselib "hspda.dll"
-#func sortval sortval $202
-#func sortstr sortstr $202
-#func sortnote sortnote $202
-#func sortget sortget $202
-#func sortbye sortbye $100
 
 #func csvstr csvstr $202
 #func csvnote csvnote $87
@@ -6263,6 +6261,10 @@ _encode_init
 #define global ease_shake_out (14)
 #define global ease_shake_inout (15)
 #define global ease_loop (4096)
+
+#define global notefind_match (0)
+#define global notefind_first (1)
+#define global notefind_instr (2)
 
 
 #ifndef _DEBUG
