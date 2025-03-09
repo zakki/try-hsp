@@ -1,0 +1,20 @@
+{
+  "name": "try-hsp",
+  "version": "1.0.0",
+  "description": "Try HSP\r =======",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ace": "^0.0.52",
+    "@types/emscripten": "^1.40.0",
+    "@types/jquery": "^3.5.32",
+    "install": "^0.13.0",
+    "npm": "^11.2.0",
+    "tsd": "^0.31.2",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,9 +1,11 @@
-/// <reference path="../typings/jquery/jquery.d.ts" />
-/// <reference path="../typings/ace/ace.d.ts" />
-/// <reference path="../typings/emscripten/emscripten.d.ts" />
+/// <reference types="ace" />
+/// <reference types="jquery" />
+/// <reference types="emscripten" />
+
+declare var Module: EmscriptenModule;
 
 module TryHSP {
-  var editor;
+  var editor: any;
 
   function setDownloadAx(): void {
     console.log("setup download");
@@ -20,7 +22,7 @@ module TryHSP {
   function runAx(): void {
     var buf = FS.readFile("source.ax");
     var runFrame = <HTMLFrameElement>document.getElementById("run");
-    runFrame.onload = () => runFrame.contentWindow["runAX"](buf);
+    runFrame.onload = () => runFrame.contentWindow["setAX"](buf);
     runFrame.contentWindow.location.reload();
   }
 
@@ -105,7 +107,7 @@ module TryHSP {
     }
   }
 
-  var recompileID;
+  let recompileID: number | undefined;
 
   $(document).ready(function () {
     console.log("ready");
@@ -131,8 +133,10 @@ module TryHSP {
     $("#compile").click(() => compile(true));
     $("#stop").click(() => {
       var runFrame = <HTMLFrameElement>document.getElementById("run");
-      var m = runFrame.contentWindow["Module"];
-      m.abort();
+      if (runFrame.contentWindow) {
+        var m = runFrame.contentWindow["Module"];
+        m.abort();
+      }
     });
     $("#share").click(() => share());
     $(window).bind("hashchange", () => loadFromHash());

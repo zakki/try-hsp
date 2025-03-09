@@ -117,18 +117,31 @@ var Module = {
 		}
 		statusElement.innerHTML = text;
 	},
-	arguments: ["start.ax"]
+	arguments: ["start.ax"],
 //	noInitialRun: true
+	hspFsInitialized: false,
 };
 Module["preRun"].push(function() {
   Module['addRunDependency']('hsp start.ax');
+  Module['hspFsInitialized'] = true;
 });
 Module.setStatus('Downloading...');
     </script>
     <script async type="text/javascript" src="hgimg4res.js"></script>
     <script async type="text/javascript" src="hsp3dish-gp.js"></script>
     <script type='text/javascript'>
-function runAX(data) {
+function setAX(data) {
+	let id = setInterval(function() {
+		if (Module["hspFsInitialized"]) {
+			console.log("runAX", data);
+			_run(data);
+			clearInterval(id);
+		} else {
+			console.log("wait");
+		}
+	}, 100);
+}
+function _run(data) {
 	ENV.HSP_WX = "960";//スクリプトの動作解像度
 	ENV.HSP_WY = "640";
 	ENV.HSP_SX = "960";//表示解像度
